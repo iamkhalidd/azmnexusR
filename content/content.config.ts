@@ -31,7 +31,7 @@ export interface ContactDetail {
 }
 
 export const COMMON_CONTENT = {
-  wordmark: "/images/azm.jpeg",
+  wordmark: "AZM Nexus",
   copyright: "© 2026 AZM Nexus Limited. All rights reserved.",
 };
 
