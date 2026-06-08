@@ -43,16 +43,21 @@ export const ContactSection = () => {
     setSubmitError("");
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch("https://formspree.io/f/mgobkzgy", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
         body: JSON.stringify(formData),
       });
+
+      const data = await response.json();
 
       if (response.ok) {
         setIsSubmitted(true);
       } else {
-        setSubmitError("Something went wrong. Please try again.");
+        setSubmitError(data?.errors?.[0]?.message || "Something went wrong. Please try again.");
       }
     } catch {
       setSubmitError("Something went wrong. Please try again.");
