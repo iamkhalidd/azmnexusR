@@ -39,7 +39,6 @@ export const NAV_CONTENT = {
   ctaText: "Partner With Us",
   links: [
     { label: "About Us", href: "#about" },
-    { label: "Services", href: "#services" },
     { label: "Portfolio", href: "#portfolio" },
     { label: "Operations", href: "#operations" },
     { label: "Team", href: "#team" },
@@ -153,7 +152,7 @@ export const CONTACT_CONTENT = {
   subtext: "Whether you are a partner, investor, institution, or client — we welcome serious inquiries across all our business sectors.",
   details: [
     { icon: "MapPin", label: "Corporate Office", value: "Lagos, Nigeria" },
-    { icon: "Mail", label: "Email Inquiries", value: "info@azmnexus.com" },
+    { icon: "Mail", label: "Email Inquiries", value: "contact@azmnexus.com" },
     { icon: "Phone", label: "Direct Line", value: "+234 901 557 1955" },
   ],
   form: {
@@ -171,7 +170,6 @@ export const CONTACT_CONTENT = {
 
 export const FOOTER_LINKS = [
   { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
   { label: "Portfolio", href: "#portfolio" },
   { label: "Contact", href: "#contact" },
 ];
