@@ -9,6 +9,7 @@ import { CheckCircle } from "lucide-react";
 export const ContactSection = () => {
   const [formData, setFormData] = useState({
     fullName: "",
+    email: "",
     company: "",
     inquiryType: CONTACT_CONTENT.form.inquiryTypeOptions[0],
     message: "",
@@ -22,6 +23,11 @@ export const ContactSection = () => {
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email address is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
     if (!formData.company.trim()) newErrors.company = "Company/Organisation is required";
     if (!formData.inquiryType.trim()) newErrors.inquiryType = "Inquiry type is required";
     if (!formData.message.trim()) newErrors.message = "Message is required";
@@ -58,6 +64,7 @@ export const ContactSection = () => {
   const handleReset = () => {
     setFormData({
       fullName: "",
+      email: "",
       company: "",
       inquiryType: CONTACT_CONTENT.form.inquiryTypeOptions[0],
       message: "",
@@ -147,6 +154,22 @@ export const ContactSection = () => {
                     }}
                   />
                   {errors.fullName && <p className="text-[#FF4444] text-[13px] mt-1">{errors.fullName}</p>}
+                </div>
+                <div>
+                  <label className="block text-text-primary text-[14px] font-semibold mb-2">
+                    {CONTACT_CONTENT.form.emailLabel}
+                  </label>
+                  <input
+                    type="email"
+                    placeholder={CONTACT_CONTENT.form.emailPlaceholder}
+                    className={`w-full border ${errors.email ? "border-[#FF4444]" : "border-[#E0EEEE]"} rounded-btn p-[12px_16px] text-text-primary placeholder-text-secondary text-[14px] focus:outline-none focus:border-[#2EB8A6]`}
+                    value={formData.email}
+                    onChange={(e) => {
+                      setFormData({...formData, email: e.target.value});
+                      if (errors.email) setErrors({...errors, email: ""});
+                    }}
+                  />
+                  {errors.email && <p className="text-[#FF4444] text-[13px] mt-1">{errors.email}</p>}
                 </div>
                 <div>
                   <label className="block text-text-primary text-[14px] font-semibold mb-2">

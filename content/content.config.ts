@@ -158,6 +158,8 @@ export const CONTACT_CONTENT = {
   form: {
     fullNameLabel: "Full Name",
     fullNamePlaceholder: "Enter your full name",
+    emailLabel: "Email Address",
+    emailPlaceholder: "Enter your email address",
     companyLabel: "Company / Organisation",
     companyPlaceholder: "Organization name",
     inquiryTypeLabel: "Inquiry Type",
