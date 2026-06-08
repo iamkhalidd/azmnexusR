@@ -152,12 +152,14 @@ export const CONTACT_CONTENT = {
   subtext: "Whether you are a partner, investor, institution, or client — we welcome serious inquiries across all our business sectors.",
   details: [
     { icon: "MapPin", label: "Corporate Office", value: "Lagos, Nigeria" },
-    { icon: "Mail", label: "Email Inquiries", value: "contact@azmnexus.com" },
+    { icon: "Mail", label: "Email Inquiries", value: "info@azmnexus.com" },
     { icon: "Phone", label: "Direct Line", value: "+234 901 557 1955" },
   ],
   form: {
     fullNameLabel: "Full Name",
     fullNamePlaceholder: "Enter your full name",
+    emailLabel: "Email Address",
+    emailPlaceholder: "Enter your email address",
     companyLabel: "Company / Organisation",
     companyPlaceholder: "Organization name",
     inquiryTypeLabel: "Inquiry Type",
