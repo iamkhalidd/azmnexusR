@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { TEAM_CONTENT } from "@/content/content.config";
+import { TEAM_CONTENT, TeamMember } from "@/content/content.config";
 import { User } from "lucide-react";
 
 export const TeamSection = () => {
@@ -30,37 +30,7 @@ export const TeamSection = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[24px]">
           {TEAM_CONTENT.members.map((member, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
-              viewport={{ once: true, amount: 0.15 }}
-              className="bg-white rounded-card p-[24px] shadow-card text-center"
-            >
-              {/* Image / Placeholder */}
-              <div className="w-[96px] h-[96px] rounded-full mx-auto mb-4 relative overflow-hidden flex items-center justify-center bg-border">
-                {member.imageUrl ? (
-                  <Image
-                    src={member.imageUrl}
-                    alt={member.name}
-                    fill
-                    className="object-cover"
-                  />
-                ) : (
-                  <User size={40} className="text-text-secondary" />
-                )}
-              </div>
-              <h3 className="text-text-primary text-[16px] font-semibold mt-[16px]">
-                {member.name}
-              </h3>
-              <p className="text-accent text-[13px] font-medium mt-[4px]">
-                {member.role}
-              </p>
-              <p className="text-text-secondary text-[14px] font-normal mt-[8px]">
-                {member.bio}
-              </p>
-            </motion.div>
+            <TeamMemberCard key={index} member={member} index={index} />
           ))}
         </div>
 
@@ -71,5 +41,45 @@ export const TeamSection = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+const TeamMemberCard = ({ member, index }: { member: TeamMember; index: number }) => {
+  const [imgError, setImgError] = React.useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
+      viewport={{ once: true, amount: 0.15 }}
+      className="bg-white rounded-card p-[24px] shadow-card text-center"
+    >
+      {/* Image / Placeholder */}
+      <div className="w-[96px] h-[96px] rounded-full mx-auto mb-4 relative overflow-hidden flex items-center justify-center bg-border">
+        {member.imageUrl && !imgError ? (
+          <Image
+            src={member.imageUrl}
+            alt={member.name}
+            fill
+            className="object-cover"
+            onError={() => setImgError(true)}
+          />
+        ) : member.imageUrl && imgError ? (
+          <div className="w-full h-full bg-[#1D4A52]" />
+        ) : (
+          <User size={40} className="text-text-secondary" />
+        )}
+      </div>
+      <h3 className="text-text-primary text-[16px] font-semibold mt-[16px]">
+        {member.name}
+      </h3>
+      <p className="text-accent text-[13px] font-medium mt-[4px]">
+        {member.role}
+      </p>
+      <p className="text-text-secondary text-[14px] font-normal mt-[8px]">
+        {member.bio}
+      </p>
+    </motion.div>
   );
 };

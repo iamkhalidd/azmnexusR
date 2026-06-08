@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { CONTACT_CONTENT } from "@/content/content.config";
 import * as LucideIcons from "lucide-react";
+import { CheckCircle } from "lucide-react";
 
 export const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -14,22 +15,56 @@ export const ContactSection = () => {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
     if (!formData.company.trim()) newErrors.company = "Company/Organisation is required";
+    if (!formData.inquiryType.trim()) newErrors.inquiryType = "Inquiry type is required";
     if (!formData.message.trim()) newErrors.message = "Message is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) {
-      console.log(formData); // TODO: connect to API endpoint
-      // Reset form or show success message if needed
+    if (!validate()) return;
+
+    setIsLoading(true);
+    setSubmitError("");
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        setSubmitError("Something went wrong. Please try again.");
+      }
+    } catch {
+      setSubmitError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const handleReset = () => {
+    setFormData({
+      fullName: "",
+      company: "",
+      inquiryType: CONTACT_CONTENT.form.inquiryTypeOptions[0],
+      message: "",
+    });
+    setErrors({});
+    setIsSubmitted(false);
+    setSubmitError("");
   };
 
   return (
@@ -79,78 +114,104 @@ export const ContactSection = () => {
             viewport={{ once: true, amount: 0.15 }}
             className="bg-white rounded-card p-[32px] shadow-contact"
           >
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-text-primary text-[14px] font-semibold mb-2">
-                  {CONTACT_CONTENT.form.fullNameLabel}
-                </label>
-                <input
-                  type="text"
-                  placeholder={CONTACT_CONTENT.form.fullNamePlaceholder}
-                  className={`w-full border ${errors.fullName ? "border-red-500" : "border-border"} rounded-btn p-[12px_16px] text-text-primary placeholder-text-secondary text-[14px] focus:outline-none focus:border-accent`}
-                  value={formData.fullName}
-                  onChange={(e) => {
-                    setFormData({...formData, fullName: e.target.value});
-                    if (errors.fullName) setErrors({...errors, fullName: ""});
-                  }}
-                />
-                {errors.fullName && <p className="text-red-500 text-[12px] mt-1">{errors.fullName}</p>}
-              </div>
-              <div>
-                <label className="block text-text-primary text-[14px] font-semibold mb-2">
-                  {CONTACT_CONTENT.form.companyLabel}
-                </label>
-                <input
-                  type="text"
-                  placeholder={CONTACT_CONTENT.form.companyPlaceholder}
-                  className={`w-full border ${errors.company ? "border-red-500" : "border-border"} rounded-btn p-[12px_16px] text-text-primary placeholder-text-secondary text-[14px] focus:outline-none focus:border-accent`}
-                  value={formData.company}
-                  onChange={(e) => {
-                    setFormData({...formData, company: e.target.value});
-                    if (errors.company) setErrors({...errors, company: ""});
-                  }}
-                />
-                {errors.company && <p className="text-red-500 text-[12px] mt-1">{errors.company}</p>}
-              </div>
-              <div>
-                <label className="block text-text-primary text-[14px] font-semibold mb-2">
-                  {CONTACT_CONTENT.form.inquiryTypeLabel}
-                </label>
-                <select
-                  className="w-full border border-border rounded-btn p-[12px_16px] text-text-primary text-[14px] focus:outline-none focus:border-accent bg-white"
-                  value={formData.inquiryType}
-                  onChange={(e) => setFormData({...formData, inquiryType: e.target.value})}
+            {isSubmitted ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <CheckCircle size={48} className="text-accent" />
+                <h3 className="text-text-primary text-[20px] font-semibold mt-[16px]">
+                  Inquiry Sent Successfully
+                </h3>
+                <p className="text-text-secondary text-[14px] mt-[8px]">
+                  Thank you for reaching out. A member of the AZM Nexus team will be in touch with you shortly.
+                </p>
+                <button
+                  onClick={handleReset}
+                  className="text-accent text-[14px] mt-8 focus:outline-none"
                 >
-                  {CONTACT_CONTENT.form.inquiryTypeOptions.map((option) => (
-                    <option key={option} value={option}>{option}</option>
-                  ))}
-                </select>
+                  Send Another Inquiry
+                </button>
               </div>
-              <div>
-                <label className="block text-text-primary text-[14px] font-semibold mb-2">
-                  {CONTACT_CONTENT.form.messageLabel}
-                </label>
-                <textarea
-                  rows={4}
-                  placeholder={CONTACT_CONTENT.form.messagePlaceholder}
-                  className={`w-full border ${errors.message ? "border-red-500" : "border-border"} rounded-btn p-[12px_16px] text-text-primary placeholder-text-secondary text-[14px] focus:outline-none focus:border-accent`}
-                  value={formData.message}
-                  onChange={(e) => {
-                    setFormData({...formData, message: e.target.value});
-                    if (errors.message) setErrors({...errors, message: ""});
-                  }}
-                />
-                {errors.message && <p className="text-red-500 text-[12px] mt-1">{errors.message}</p>}
-              </div>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.15 }}
-                type="submit"
-                className="w-full bg-accent text-white text-[16px] font-semibold py-[16px] rounded-btn"
-              >
-                {CONTACT_CONTENT.form.submitButton}
-              </motion.button>
-            </form>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-text-primary text-[14px] font-semibold mb-2">
+                    {CONTACT_CONTENT.form.fullNameLabel}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={CONTACT_CONTENT.form.fullNamePlaceholder}
+                    className={`w-full border ${errors.fullName ? "border-[#FF4444]" : "border-border"} rounded-btn p-[12px_16px] text-text-primary placeholder-text-secondary text-[14px] focus:outline-none focus:border-accent`}
+                    value={formData.fullName}
+                    onChange={(e) => {
+                      setFormData({...formData, fullName: e.target.value});
+                      if (errors.fullName) setErrors({...errors, fullName: ""});
+                    }}
+                  />
+                  {errors.fullName && <p className="text-[#FF4444] text-[13px] mt-1">{errors.fullName}</p>}
+                </div>
+                <div>
+                  <label className="block text-text-primary text-[14px] font-semibold mb-2">
+                    {CONTACT_CONTENT.form.companyLabel}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={CONTACT_CONTENT.form.companyPlaceholder}
+                    className={`w-full border ${errors.company ? "border-[#FF4444]" : "border-border"} rounded-btn p-[12px_16px] text-text-primary placeholder-text-secondary text-[14px] focus:outline-none focus:border-accent`}
+                    value={formData.company}
+                    onChange={(e) => {
+                      setFormData({...formData, company: e.target.value});
+                      if (errors.company) setErrors({...errors, company: ""});
+                    }}
+                  />
+                  {errors.company && <p className="text-[#FF4444] text-[13px] mt-1">{errors.company}</p>}
+                </div>
+                <div>
+                  <label className="block text-text-primary text-[14px] font-semibold mb-2">
+                    {CONTACT_CONTENT.form.inquiryTypeLabel}
+                  </label>
+                  <select
+                    className={`w-full border ${errors.inquiryType ? "border-[#FF4444]" : "border-border"} rounded-btn p-[12px_16px] text-text-primary text-[14px] focus:outline-none focus:border-accent bg-white`}
+                    value={formData.inquiryType}
+                    onChange={(e) => {
+                      setFormData({...formData, inquiryType: e.target.value});
+                      if (errors.inquiryType) setErrors({...errors, inquiryType: ""});
+                    }}
+                  >
+                    {CONTACT_CONTENT.form.inquiryTypeOptions.map((option) => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
+                  </select>
+                  {errors.inquiryType && <p className="text-[#FF4444] text-[13px] mt-1">{errors.inquiryType}</p>}
+                </div>
+                <div>
+                  <label className="block text-text-primary text-[14px] font-semibold mb-2">
+                    {CONTACT_CONTENT.form.messageLabel}
+                  </label>
+                  <textarea
+                    rows={4}
+                    placeholder={CONTACT_CONTENT.form.messagePlaceholder}
+                    className={`w-full border ${errors.message ? "border-[#FF4444]" : "border-border"} rounded-btn p-[12px_16px] text-text-primary placeholder-text-secondary text-[14px] focus:outline-none focus:border-accent`}
+                    value={formData.message}
+                    onChange={(e) => {
+                      setFormData({...formData, message: e.target.value});
+                      if (errors.message) setErrors({...errors, message: ""});
+                    }}
+                  />
+                  {errors.message && <p className="text-[#FF4444] text-[13px] mt-1">{errors.message}</p>}
+                </div>
+                {submitError && (
+                  <p className="text-[#FF4444] text-[14px] mb-4 text-center">{submitError}</p>
+                )}
+                <motion.button
+                  whileHover={!isLoading ? { scale: 1.02 } : {}}
+                  transition={{ duration: 0.15 }}
+                  type="submit"
+                  disabled={isLoading}
+                  className={`w-full bg-accent text-white text-[16px] font-semibold py-[16px] rounded-btn ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+                >
+                  {isLoading ? "Sending..." : CONTACT_CONTENT.form.submitButton}
+                </motion.button>
+              </form>
+            )}
           </motion.div>
         </div>
       </div>

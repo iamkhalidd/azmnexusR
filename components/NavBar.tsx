@@ -1,12 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NAV_CONTENT, COMMON_CONTENT } from "@/content/content.config";
 import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMenuOpen(false);
+    };
+    if (isMenuOpen) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isMenuOpen]);
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-white border-b border-border z-50">
@@ -32,13 +42,14 @@ export const NavBar = () => {
 
         {/* CTA Button */}
         <div className="hidden md:block">
-          <motion.button
+          <motion.a
+            href="#contact"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.15 }}
-            className="bg-primary text-white text-[14px] font-medium px-6 py-[12px] rounded-btn"
+            className="bg-primary text-white text-[14px] font-medium px-6 py-[12px] rounded-btn inline-block"
           >
             {NAV_CONTENT.ctaText}
-          </motion.button>
+          </motion.a>
         </div>
 
         {/* Mobile Hamburger */}
@@ -51,9 +62,18 @@ export const NavBar = () => {
         </button>
       </div>
 
+      {/* Mobile Backdrop */}
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40"
+          onClick={() => setIsMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Mobile Drawer */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-white z-[60] flex flex-col">
+        <div className="fixed inset-0 bg-white z-50 flex flex-col md:hidden">
           <div className="flex justify-end p-6">
             <button
               onClick={() => setIsMenuOpen(false)}
@@ -73,13 +93,15 @@ export const NavBar = () => {
                 {link.label}
               </a>
             ))}
-            <motion.button
+            <motion.a
+              href="#contact"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.15 }}
-              className="bg-primary text-white text-[16px] font-medium px-8 py-4 rounded-btn mt-4"
+              className="bg-primary text-white text-[16px] font-medium px-8 py-4 rounded-btn mt-4 inline-block"
+              onClick={() => setIsMenuOpen(false)}
             >
               {NAV_CONTENT.ctaText}
-            </motion.button>
+            </motion.a>
           </div>
         </div>
       )}

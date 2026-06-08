@@ -6,17 +6,24 @@ import { motion } from "framer-motion";
 import { HERO_CONTENT } from "@/content/content.config";
 
 export const HeroSection = () => {
+  const [imgError, setImgError] = React.useState(false);
+
   return (
     <section id="hero" className="relative min-h-[75vh] flex items-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src={HERO_CONTENT.backgroundImage}
-          alt="Nigerian corporate boardroom"
-          fill
-          className="object-cover object-top"
-          priority
-        />
+        {!imgError ? (
+          <Image
+            src={HERO_CONTENT.backgroundImage}
+            alt="Nigerian corporate boardroom"
+            fill
+            className="object-cover object-top"
+            priority
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="w-full h-full bg-[#1D4A52]" />
+        )}
         {/* Overlay */}
         <div className="absolute inset-0 bg-primary opacity-[78%]" />
       </div>
