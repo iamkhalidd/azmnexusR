@@ -28,6 +28,7 @@ export interface ContactDetail {
   icon: string;
   label: string;
   value: string;
+  href?: string;
 }
 
 export const COMMON_CONTENT = {
@@ -114,12 +115,29 @@ export const PORTFOLIO_CONTENT = {
 export const OPERATIONS_CONTENT = {
   label: "OPERATIONAL PROGRESS",
   title: "Visible Progress Across Every Sector",
-  subtext: "We maintain transparent tracking of our operational status to ensure stakeholder alignment and project execution.",
+  subtext: "We keep operational momentum visible across core sectors, tracking deployment status and execution milestones.",
+  legend: "Active indicates fully operational businesses, while In Progress indicates initiatives moving toward launch.",
   cards: [
-    { title: "Agriculture", description: "Supply chain established and initial harvests processed.", status: "Active" },
-    { title: "Trade", description: "Distribution networks operational across key regions.", status: "Active" },
-    { title: "Tech/Health", description: "Platform development and partner onboarding phases.", status: "In Progress" },
-    { title: "Digital Assets", description: "Trading protocols live and compliance frameworks instituted.", status: "Active" },
+    {
+      title: "Agriculture",
+      description: "Supply chain established and initial harvests processed, driving farm-to-market distribution.",
+      status: "Active",
+    },
+    {
+      title: "Trade",
+      description: "Distribution networks are operational across key regions, enabling reliable goods movement.",
+      status: "Active",
+    },
+    {
+      title: "Tech/Health",
+      description: "Platform development and partner onboarding continue as the service prepares for launch.",
+      status: "In Progress",
+    },
+    {
+      title: "Digital Assets",
+      description: "Trading protocols are live, with compliance frameworks being reinforced for scale.",
+      status: "Active",
+    },
   ] as OperationsCard[],
 };
 
@@ -151,9 +169,24 @@ export const CONTACT_CONTENT = {
   title: "Let's Build Something Together",
   subtext: "Whether you are a partner, investor, institution, or client — we welcome serious inquiries across all our business sectors.",
   details: [
-    { icon: "MapPin", label: "Corporate Office", value: "Lagos, Nigeria" },
-    { icon: "Mail", label: "Email Inquiries", value: "info@azmnexus.com" },
-    { icon: "Phone", label: "Direct Line", value: "+234 901 557 1955" },
+    {
+      icon: "MapPin",
+      label: "Corporate Office",
+      value: "Lagos, Nigeria",
+      href: "https://www.google.com/maps/search/?api=1&query=Lagos%2C+Nigeria",
+    },
+    {
+      icon: "Mail",
+      label: "Email Inquiries",
+      value: "info@azmnexus.com",
+      href: "mailto:info@azmnexus.com",
+    },
+    {
+      icon: "Phone",
+      label: "Direct Line",
+      value: "+234 901 557 1955",
+      href: "tel:+2349015571955",
+    },
   ],
   form: {
     fullNameLabel: "Full Name",

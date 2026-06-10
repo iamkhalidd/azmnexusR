@@ -109,7 +109,18 @@ export const ContactSection = () => {
                     <div>
                       <p className="text-white text-[14px] font-normal">
                         <span className="text-white opacity-70 block text-[12px] uppercase font-semibold tracking-wider">{detail.label}</span>
-                        {detail.value}
+                        {detail.href ? (
+                          <a
+                            href={detail.href}
+                            className="text-white hover:text-accent transition-colors"
+                            target={detail.href.startsWith("http") ? "_blank" : undefined}
+                            rel={detail.href.startsWith("http") ? "noreferrer" : undefined}
+                          >
+                            {detail.value}
+                          </a>
+                        ) : (
+                          detail.value
+                        )}
                       </p>
                     </div>
                   </div>

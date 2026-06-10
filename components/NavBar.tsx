@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { NAV_CONTENT, COMMON_CONTENT } from "@/content/content.config";
 import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
@@ -21,10 +22,17 @@ export const NavBar = () => {
   return (
     <nav className="fixed top-0 left-0 w-full bg-white border-b border-border z-50">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-20 h-20 flex items-center justify-between">
-        {/* Wordmark */}
-        <div className="text-primary font-semibold text-[18px]">
-          {COMMON_CONTENT.wordmark}
-        </div>
+        {/* Logo */}
+        <a href="#" className="flex items-center">
+          <Image
+            src="/images/azm-logo.png"
+            alt={COMMON_CONTENT.wordmark}
+            width={100}
+            height={36}
+            className="h-9 w-auto object-contain"
+            priority
+          />
+        </a>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">

@@ -24,6 +24,9 @@ export const OperationsSection = () => {
           <p className="text-text-secondary text-[16px] mt-4 max-w-2xl">
             {OPERATIONS_CONTENT.subtext}
           </p>
+          <p className="text-text-secondary text-[14px] mt-4 max-w-xl opacity-80">
+            {OPERATIONS_CONTENT.legend}
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
@@ -34,9 +37,9 @@ export const OperationsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
               viewport={{ once: true, amount: 0.15 }}
-              className="bg-section-alt border-l-4 border-accent rounded-card p-[32px] min-h-[160px] shadow-operations flex flex-col"
+              className="bg-section-alt border-l-4 rounded-card p-[32px] min-h-[180px] shadow-operations flex flex-col transition-transform duration-300 hover:-translate-y-1"
             >
-              <div className="flex justify-between items-start">
+              <div className="flex justify-between items-start gap-4">
                 <h3 className="text-text-primary text-[18px] font-semibold">
                   {card.title}
                 </h3>
